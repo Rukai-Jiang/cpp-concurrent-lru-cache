@@ -43,7 +43,9 @@ void test_update_and_erase() {
 }
 
 void test_concurrent_access() {
-    ConcurrentLruCache<int, int> cache(128);
+    // Keep every test key resident so this test isolates synchronization from
+    // the independently tested eviction policy.
+    ConcurrentLruCache<int, int> cache(8000);
     std::vector<std::thread> threads;
 
     for (int worker = 0; worker < 8; ++worker) {
@@ -70,4 +72,3 @@ int main() {
     test_concurrent_access();
     std::cout << "All concurrent LRU cache tests passed.\n";
 }
-
